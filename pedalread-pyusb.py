@@ -60,12 +60,12 @@ t_min=5000
 while (1):
    try:
 	pdata = pedals.read(ep_pedals_in.bEndpointAddress, ep_pedals_in.wMaxPacketSize, timeout=100)
-#	t=time.time();
-#	print "gotdata"
-#	t_now=time.time()
-#	t_since_last_pedal=t_now-t_gotdata
-#	t_min=min(t_min,t_since_last_pedal)
-#	t_gotdata=t_now
+	t=time.time();
+	print "gotdata"
+	t_now=time.time()
+	t_since_last_pedal=t_now-t_gotdata
+	t_min=min(t_min,t_since_last_pedal)
+	t_gotdata=t_now
 	acceleration= 1023 - (pdata[0]+ (pdata[1]<<8))
 	brake = 1023 -(pdata[2]+ (pdata[3]<<8))
 	clutch= 1023 -(pdata[4]+ (pdata[5]<<8))
@@ -75,10 +75,12 @@ while (1):
 	temp[4]=(brake >> 8) & 255
 	temp[5]=clutch & 255
 	temp[6]=(clutch >> 8) & 255
-	teensy.write(ep_teensy_out,temp)
+#	teensy.write(ep_teensy_out,temp)
 #	t_wrote=time.time()
 	
 #        data=[]
+	o=(acceleration << 4)* "*"
+	print o, acceleration
 # 	print "a ", acceleration, \
 # 		"b ", brake, \
 # 		"c ", clutch, \
