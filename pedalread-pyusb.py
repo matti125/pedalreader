@@ -57,10 +57,21 @@ count=1
 t_gotdata=0
 t_min=5000
 
+
+acceleration= 0
+brake = 0
+clutch= 0
+temp[1]=acceleration & 255
+temp[2]=(acceleration >> 8) & 255
+temp[3]=brake & 255
+temp[4]=(brake >> 8) & 255
+temp[5]=clutch & 255
+temp[6]=(clutch >> 8) & 255
+d_wrote=0
 d_wrote_max=0
 while (1):
    try:
-	pdata = pedals.read(ep_pedals_in.bEndpointAddress, ep_pedals_in.wMaxPacketSize, timeout=100000)
+	pdata = pedals.read(ep_pedals_in.bEndpointAddress, ep_pedals_in.wMaxPacketSize, timeout=500)
 	t=time.time();
 	t_now=time.time()
 	t_since_last_pedal=t_now-t_gotdata
@@ -75,9 +86,7 @@ while (1):
 	temp[4]=(brake >> 8) & 255
 	temp[5]=clutch & 255
 	temp[6]=(clutch >> 8) & 255
-
 	
-	teensy.clear_halt(ep_teensy_out)
 	nw=teensy.write(ep_teensy_out,temp,timeout=2000)
 	
 	d_wrote=time.time()-t_now
@@ -85,7 +94,7 @@ while (1):
 	
 	
 	o=(acceleration >> 4)* "*"
-	print o, acceleration, " ",int(d_wrote*1000), " ", int(d_wrote_max*1000), "n",nw
+#	print o, acceleration, " ",int(d_wrote*1000), " ", int(d_wrote_max*1000), "n",nw
 # 	print "a ", acceleration, \
 # 		"b ", brake, \
 # 		"c ", clutch, \
@@ -95,8 +104,16 @@ while (1):
 #	data=teensy.read(ep_teensy_in, 1000);
 
    except usb.core.USBError as e:
-        data = None
-        if e.args == ('Operation timed out',):
+#	print e, "args", e.args
+#        if e.args == ('Operation timed out',):
+#	    t_now=time.time()
+#	    t=time.time();
+ 	    teensy.write(ep_teensy_out,temp,timeout=2000) #this keeps something alive, 
+#so there will not be a max 1000 ms delay when writing to teensy. 
+#I do not know what sleeps,is is the RPi or smthng else. You should check for errors now...
+#	    d_wrote=time.time()-t_now
+#	    o=(acceleration >> 4)* "-"
+#	    print o, acceleration, " ",int(d_wrote*1000), " ", int(d_wrote_max*1000)
             continue
 # release the device
 usb.util.release_interface(pedals, intf_pedals)
