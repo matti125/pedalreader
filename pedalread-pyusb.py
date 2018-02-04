@@ -90,8 +90,9 @@ while (1):
 			brake = (pdata[2]+ (pdata[3]<<8))
 			clutch= (pdata[4]+ (pdata[5]<<8))
 			acceleration = (acceleration >> 2) #need to throw 2 lsb, as the DA expects 10-bit values, and the v3 provides 12 bits.
-			brake = (brake >> 2)
+			brake = min(brake, 1023)
 			clutch = (clutch >> 2)
+
 		else:
 	 		acceleration= 1023 - (pdata[0]+ (pdata[1]<<8))
 			brake = 1023 -(pdata[2]+ (pdata[3]<<8))
@@ -127,12 +128,8 @@ while (1):
 			teensy.write(ep_teensy_out,temp,timeout=2000) #this keeps something alive, 
 #so there will not be a max 1000 ms delay when writing to teensy. 
 #I do not know what sleeps,is is the RPi or smthng else. You should check for errors now...
-#	    d_wrote=time.time()-t_now
-#	    o=(acceleration >> 4)* "-"
-#	    print o, acceleration, " ",int(d_wrote*1000), " ", int(d_wrote_max*1000)
 	except usb.core.USBError as e:
 		print e, "args", e.args
-	continue
 # release the device
 usb.util.release_interface(pedals, intf_pedals)
 usb.util.release_interface(teensy, intf_teensy)
