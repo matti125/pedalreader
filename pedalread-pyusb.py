@@ -4,7 +4,7 @@ import usb.util
 import time
 import argparse
 
-brakeGain=2	#the pedals can be pretty heavy to press without adding some gain
+brakeGain=1	#the pedals can be pretty heavy to press without adding some gain
 
 parser = argparse.ArgumentParser("pedalreader")
 parser.add_argument("--noDA", help="No Digital to Analog converter is used or probed for", action = "store_true")
