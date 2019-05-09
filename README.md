@@ -1,5 +1,5 @@
 # pedalreader
-pedalreader makes the Fanatec CSPv2 and CSPv3 pedals able to connect to the Thrusrmastet T300 wheelbase. Pedalreader reads the pedal values it receives via USB, and talks to a DA converter to convert the values in the voltage ranges that the T300 expects to get from its "native" pedals.
+pedalreader makes the Fanatec CSPv2 and CSPv3 pedals able to connect to the Thrusrmaster T300 wheelbase. Pedalreader reads the pedal values it receives via USB, and talks to a DA converter to convert the values in the voltage ranges that the T300 expects to get from its "native" pedals.
 
 Pedalreader runs on Raspberry Pi. 
 
